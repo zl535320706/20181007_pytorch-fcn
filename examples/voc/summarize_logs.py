@@ -11,7 +11,14 @@ import yaml
 def main():
     logs_dir = 'logs'
 
-    headers = ['name', 'model', 'epoch', 'iteration', 'valid/mean_iu']
+    headers = [
+        'name',
+        'model',
+        'pretrained_model',
+        'epoch',
+        'iteration',
+        'valid/mean_iu',
+    ]
     rows = []
     for log in os.listdir(logs_dir):
         log_dir = osp.join(logs_dir, log)
@@ -33,6 +40,7 @@ def main():
         rows.append([
             osp.join(logs_dir, log),
             config['model'],
+            config.get('pretrained_model', None),
             row_best.index[0][0],
             row_best.index[0][1],
             100 * row_best['valid/mean_iu'].values[0],
