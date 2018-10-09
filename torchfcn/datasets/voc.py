@@ -9,6 +9,7 @@ import scipy.io
 import torch
 from torch.utils import data
 
+import cv2
 
 class VOCClassSegBase(data.Dataset):
 
@@ -43,16 +44,16 @@ class VOCClassSegBase(data.Dataset):
         self._transform = transform
 
         # VOC2011 and others are subset of VOC2012
-        dataset_dir = osp.join(self.root, 'VOC/VOCdevkit/VOC2012')
+        dataset_dir = osp.join(self.root, 'VOC2012/benchmark_RELEASE/dataset')
         self.files = collections.defaultdict(list)
         for split in ['train', 'val']:
             imgsets_file = osp.join(
-                dataset_dir, 'ImageSets/Segmentation/%s.txt' % split)
+                dataset_dir, '%s.txt' % split)
             for did in open(imgsets_file):
                 did = did.strip()
-                img_file = osp.join(dataset_dir, 'JPEGImages/%s.jpg' % did)
+                img_file = osp.join(dataset_dir, 'img/%s.jpg' % did)
                 lbl_file = osp.join(
-                    dataset_dir, 'SegmentationClass/%s.png' % did)
+                    dataset_dir, 'cls_png/%s.png' % did)
                 self.files[split].append({
                     'img': img_file,
                     'lbl': lbl_file,
@@ -80,8 +81,11 @@ class VOCClassSegBase(data.Dataset):
     def transform(self, img, lbl):
         img = img[:, :, ::-1]  # RGB -> BGR
         img = img.astype(np.float64)
+        lbl = lbl.astype(np.float64)
         img -= self.mean_bgr
+        img = cv2.resize(img, (224, 224), interpolation=cv2.INTER_LINEAR)
         img = img.transpose(2, 0, 1)
+        lbl = cv2.resize(lbl, (224,224), interpolation=cv2.INTER_LINEAR)
         img = torch.from_numpy(img).float()
         lbl = torch.from_numpy(lbl).long()
         return img, lbl
@@ -105,7 +109,7 @@ class VOC2011ClassSeg(VOCClassSegBase):
         imgsets_file = osp.join(
             pkg_root, 'ext/fcn.berkeleyvision.org',
             'data/pascal/seg11valid.txt')
-        dataset_dir = osp.join(self.root, 'VOC/VOCdevkit/VOC2012')
+        dataset_dir = osp.join(self.root, 'VOC2012/VOCdevkit/VOC2012')
         for did in open(imgsets_file):
             did = did.strip()
             img_file = osp.join(dataset_dir, 'JPEGImages/%s.jpg' % did)
@@ -132,7 +136,7 @@ class SBDClassSeg(VOCClassSegBase):
         self.split = split
         self._transform = transform
 
-        dataset_dir = osp.join(self.root, 'VOC/benchmark_RELEASE/dataset')
+        dataset_dir = osp.join(self.root, 'VOC2012/benchmark_RELEASE/dataset')
         self.files = collections.defaultdict(list)
         for split in ['train', 'val']:
             imgsets_file = osp.join(dataset_dir, '%s.txt' % split)

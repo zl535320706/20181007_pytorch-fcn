@@ -15,14 +15,14 @@ import tqdm
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('model_file', help='Model path')
-    parser.add_argument('-g', '--gpu', type=int, default=0)
+    parser.add_argument('--model_file', help='Model path',default='/home/zhangli/20181007_pytorch-fcn/examples/voc/logs/MODEL-fcn8s_CFG-001_MAX_ITERATION-100000_LR-1e-14_MOMENTUM-0.99_WEIGHT_DECAY-0.0005_INTERVAL_VALIDATE-4000_VCS-aa8d9b5_TIME-20181008-220749/fcn8s-model_best.pth')
+    parser.add_argument('-g', '--gpu', type=int, default=1)
     args = parser.parse_args()
 
     os.environ['CUDA_VISIBLE_DEVICES'] = str(args.gpu)
     model_file = args.model_file
 
-    root = osp.expanduser('~/data/datasets')
+    root = osp.expanduser('/home/zt/keras/datasets')
     val_loader = torch.utils.data.DataLoader(
         torchfcn.datasets.VOC2011ClassSeg(
             root, split='seg11valid', transform=True),
