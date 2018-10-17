@@ -157,10 +157,10 @@ class Trainer(object):
             'optim_state_dict': self.optim.state_dict(),
             'model_state_dict': self.model.state_dict(),
             'best_mean_iu': self.best_mean_iu,
-        }, osp.join(self.out, 'checkpoint.pth.tar'))
+        }, osp.join(self.out, 'checkpoint_%07d_%5f.pth'%(self.iteration,mean_iu)))
         if is_best:
-            shutil.copy(osp.join(self.out, 'checkpoint.pth.tar'),
-                        osp.join(self.out, 'model_best.pth.tar'))
+            shutil.copy(osp.join(self.out, 'checkpoint_%07d_%5f.pth'%(self.iteration,mean_iu)),
+                        osp.join(self.out, 'fcn8s_atonce_model_best.pth'))
 
         if training:
             self.model.train()

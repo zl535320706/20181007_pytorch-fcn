@@ -5,7 +5,8 @@ import os
 import os.path as osp
 
 import torch
-
+import sys
+sys.path.append("../../torchfcn")
 import torchfcn
 
 from train_fcn32s import get_log_dir
@@ -16,8 +17,8 @@ configurations = {
     # same configuration as original work
     # https://github.com/shelhamer/fcn.berkeleyvision.org
     1: dict(
-        max_iteration=100000,
-        lr=1.0e-10,
+        max_iteration=200000,
+        lr=5.0e-11,
         momentum=0.99,
         weight_decay=0.0005,
         interval_validate=4000,
@@ -30,10 +31,10 @@ here = osp.dirname(osp.abspath(__file__))
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-g', '--gpu', type=int, required=True)
+    parser.add_argument('-g', '--gpu', type=int, default=1)
     parser.add_argument('-c', '--config', type=int, default=1,
                         choices=configurations.keys())
-    parser.add_argument('--resume', help='Checkpoint path')
+    parser.add_argument('--resume', help='Checkpoint path', default="/home/zhangli/20181007_pytorch-fcn/examples/voc/logs/MODEL-fcn8s-atonce_CFG-001_MAX_ITERATION-100000_LR-1e-10_MOMENTUM-0.99_WEIGHT_DECAY-0.0005_INTERVAL_VALIDATE-4000_VCS-aa8d9b5_TIME-20181016-131809/fcn8s_atonce_model_best.pth")
     args = parser.parse_args()
 
     gpu = args.gpu
@@ -50,7 +51,7 @@ def main():
 
     # 1. dataset
 
-    root = osp.expanduser('~/data/datasets')
+    root = osp.expanduser('/home/zt/keras/datasets')
     kwargs = {'num_workers': 4, 'pin_memory': True} if cuda else {}
     train_loader = torch.utils.data.DataLoader(
         torchfcn.datasets.SBDClassSeg(root, split='train', transform=True),

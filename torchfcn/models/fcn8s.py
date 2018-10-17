@@ -63,12 +63,12 @@ class FCN8s(nn.Module):
         self.pool5 = nn.MaxPool2d(2, stride=2, ceil_mode=True)  # 1/32
 
         # fc6
-        self.fc6 = nn.Conv2d(512, 4096, 7)
+        self.fc6 = nn.Conv2d(512, 1024, 7)
         self.relu6 = nn.ReLU(inplace=True)
         self.drop6 = nn.Dropout2d()
 
         # fc7
-        self.fc7 = nn.Conv2d(4096, 4096, 1)
+        self.fc7 = nn.Conv2d(1024, 4096, 1)
         self.relu7 = nn.ReLU(inplace=True)
         self.drop7 = nn.Dropout2d()
 
@@ -267,8 +267,8 @@ class FCN8sAtOnce(FCN8s):
                 assert l1.bias.size() == l2.bias.size()
                 l2.weight.data.copy_(l1.weight.data)
                 l2.bias.data.copy_(l1.bias.data)
-        for i, name in zip([0, 3], ['fc6', 'fc7']):
-            l1 = vgg16.classifier[i]
-            l2 = getattr(self, name)
-            l2.weight.data.copy_(l1.weight.data.view(l2.weight.size()))
-            l2.bias.data.copy_(l1.bias.data.view(l2.bias.size()))
+        # for i, name in zip([0, 3], ['fc6', 'fc7']):
+        #     l1 = vgg16.classifier[i]
+        #     l2 = getattr(self, name)
+        #     l2.weight.data.copy_(l1.weight.data.view(l2.weight.size()))
+        #     l2.bias.data.copy_(l1.bias.data.view(l2.bias.size()))

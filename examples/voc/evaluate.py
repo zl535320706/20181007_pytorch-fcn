@@ -15,8 +15,8 @@ import tqdm
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_file', help='Model path',default='/home/zhangli/20181007_pytorch-fcn/examples/voc/logs/MODEL-fcn8s_CFG-001_MAX_ITERATION-100000_LR-1e-14_MOMENTUM-0.99_WEIGHT_DECAY-0.0005_INTERVAL_VALIDATE-4000_VCS-aa8d9b5_TIME-20181008-220749/fcn8s-model_best.pth')
-    parser.add_argument('-g', '--gpu', type=int, default=1)
+    parser.add_argument('--model_file', help='Model path',default='/home/zhangli/20181007_pytorch-fcn/examples/voc/logs/MODEL-fcn8s-atonce_CFG-001_MAX_ITERATION-100000_LR-1e-10_MOMENTUM-0.99_WEIGHT_DECAY-0.0005_INTERVAL_VALIDATE-4000_VCS-aa8d9b5_TIME-20181016-131809/fcn8s_atonce_model_best.pth')
+    parser.add_argument('-g', '--gpu', type=int, default=2)
     args = parser.parse_args()
 
     os.environ['CUDA_VISIBLE_DEVICES'] = str(args.gpu)

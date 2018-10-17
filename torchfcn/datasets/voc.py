@@ -83,9 +83,9 @@ class VOCClassSegBase(data.Dataset):
         img = img.astype(np.float64)
         lbl = lbl.astype(np.float64)
         img -= self.mean_bgr
-        img = cv2.resize(img, (224, 224), interpolation=cv2.INTER_LINEAR)
+        # img = cv2.resize(img, (224, 224), interpolation=cv2.INTER_LINEAR)
         img = img.transpose(2, 0, 1)
-        lbl = cv2.resize(lbl, (224,224), interpolation=cv2.INTER_LINEAR)
+        # lbl = cv2.resize(lbl, (224,224), interpolation=cv2.INTER_LINEAR)
         img = torch.from_numpy(img).float()
         lbl = torch.from_numpy(lbl).long()
         return img, lbl

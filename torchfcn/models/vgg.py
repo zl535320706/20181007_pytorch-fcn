@@ -10,9 +10,9 @@ def VGG16(pretrained=False):
     model = torchvision.models.vgg16(pretrained=False)
     if not pretrained:
         return model
-    model_file = _get_vgg16_pretrained_model()
-    state_dict = torch.load(model_file)
-    model.load_state_dict(state_dict)
+    # model_file = _get_vgg16_pretrained_model()
+    state_dict = torch.load("/home/zhangli/.torch/models/vgg16-00b39a1b_caffe.pth")
+    model.load_state_dict(state_dict,strict=False)
     return model
 
 
